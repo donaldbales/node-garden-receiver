@@ -1,0 +1,20 @@
+drop   table garden_data;
+create table garden_data (
+id              bigint         auto_increment primary key,
+actuator_east   varchar(30),
+actuator_west   varchar(30),
+moisture        int,
+sample_date     datetime,
+temp_air_east   decimal,
+temp_air_west   decimal,
+temp_moisture   decimal,
+temp_outside    decimal,
+temp_rpi        decimal,
+temp_soil_east  decimal,
+temp_soil_west  decimal,
+insert_date     datetime       default current_timestamp,
+update_date     datetime       default current_timestamp on update current_timestamp );
+
+create unique index garden_data_uk
+on                  garden_data (
+sample_date );
