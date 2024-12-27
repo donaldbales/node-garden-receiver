@@ -2,6 +2,7 @@
 .DS_Store
 
 # Logs
+*.err
 logs
 *.log
 npm-debug.log*

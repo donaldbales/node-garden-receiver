@@ -88,6 +88,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-process.on('SIGTERM', process.exit());
-process.on('SIGINT', process.exit());

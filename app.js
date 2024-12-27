@@ -42,13 +42,13 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-/*
-const connection = mysql.createConnection({
-  host: 'raspberrypi-5-mysql',
-  user: 'don',
-  password: 'ILoveTerry!',
-  database: 'don'
-});
-connection.connect();
-*/
+
+function shut_down() {
+  console.log('Shutting down.');
+  process.exit(0);
+}
+
+process.on('SIGTERM', shut_down);
+process.on('SIGINT', shut_down);
+
 module.exports = app;

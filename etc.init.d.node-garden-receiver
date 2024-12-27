@@ -10,8 +10,7 @@
 #                    placed in /etc/init.d.
 ### END INIT INFO
 
-# Author: Donald Bales <dbales@anl.gov>
-# Argonne National Laboratory
+# Author: Donald Bales <don@donaldbales.com>
 
 #set -x
 
