@@ -1,6 +1,6 @@
 import * as bunyan from 'bunyan';
 
-const logLevel: string = (process.env.LOG_LEVEL as string) || 'debug';
+const logLevel: string = (process.env.LOG_LEVEL as string) || 'info';
 const levelFromName: any = bunyan.levelFromName;
 const level: number = levelFromName[logLevel]; 
 const name: string = 'node-garden-receiver';

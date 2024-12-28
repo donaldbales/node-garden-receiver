@@ -17,8 +17,10 @@ function getConnection(): Promise<any> {
   return new Promise((resolve, reject) => {
     pool.getConnection((error: any, connection: any) => {
       if (error) {
+        log.debug({ moduleName, methodName, error }, 'error getting a connection!');
         return reject(error);
       } else {
+        log.debug({ moduleName, methodName }, 'success getting a connection.');
         return resolve(connection);
       }
     });
@@ -32,15 +34,23 @@ export async function connect(): Promise<any> {
     if (!pool) {
       initializePool();
     }
-    async () => {
+    (async () => {
       let connection: any;
       if (pool) {
-        connection = await getConnection();
+        try {
+          connection = await getConnection();
+          log.debug({ moduleName, methodName, connection }, 'after getting connection.');
+        }
+        catch (error) {
+          log.error({ moduleName, methodName, error }, 'after getting connection.');
+          return reject(error);
+        }
       } else {
+        log.debug({ moduleName, methodName }, 'no connection pool!');
         return reject(new Error('no connection pool'));
       }
       return resolve(connection);
-    }
+    })();
   });
 }
 
@@ -50,8 +60,10 @@ export async function query(conn: any, sql: string, params: any[] = []): Promise
   return new Promise((resolve, reject) => {
     conn.query(sql, params, (error: any, results: any, fields: any) => {
       if (error) {
+        log.debug({ moduleName, methodName, error }, 'error when querying the database!');
         return reject({ error });
       } else {
+        log.debug({ moduleName, methodName, results, fields }, 'success when querying the database.');
         return resolve({ results, fields });
       }
     });
@@ -61,7 +73,7 @@ export async function query(conn: any, sql: string, params: any[] = []): Promise
 function initializePool() {
   const methodName: string = 'initializePool';
   log.debug({ moduleName, methodName }, 'starting...');
-  const connectionLimit: number = Number.parseInt((process.env.MYSQL_CONNECTION_LIMIT as string)) || 30;
+  const connectionLimit: number = Number.parseInt((process.env.MYSQL_CONNECTION_LIMIT as string)) || 3;
   const host: string = (process.env.MYSQL_HOST as string) || 'raspberrypi-5-mysql';
   const user: string = (process.env.MYSQL_USER as string) || 'don';
   const password: string = (process.env.MYSQL_PASSWORD as string) || 'don';

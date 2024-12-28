@@ -47,12 +47,15 @@ export async function insertOne(document: any): Promise<any> {
       `;
     log.debug({ moduleName, methodName, sql });
 
-    async () => {
+    (async () => {
       let conn: any;
       try {
         conn = await db.connect();
+        log.debug({ moduleName, methodName, conn }, `got database connection.`);
         const result: any = await db.query(conn, sql, params);
+        log.debug({ moduleName, methodName, result }, `got database result.`);
         conn.release();
+        log.debug({ moduleName, methodName }, `connection released.`);
 
         let results: any = document;
         results.id  = result.results.insertId;
@@ -60,14 +63,17 @@ export async function insertOne(document: any): Promise<any> {
 
         log.info({ moduleName, methodName, duration: `${(Date.now() - startDuration) / 1000}` });
 
-        resolve(results);
+        log.debug({ moduleName, methodName, results }, `returning results.`);
+        return resolve(results);
       } catch (error) {
-        log.error({ moduleName, methodName, error }); 
+        log.error({ moduleName, methodName, error }, `got an error!`); 
         if (conn && conn.release) {
           conn.release();
         }
-        reject(error);
+        log.debug({ moduleName, methodName, error }, `returning the error!`);
+        return reject(error);
       }
-    }
+    })();
+
   });
 }

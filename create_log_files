@@ -1,0 +1,10 @@
+#!/bin/bash
+set -x
+rm /home/don/node-garden-receiver/receiver.err
+rm /home/don/node-garden-receiver/receiver.log
+touch /home/don/node-garden-receiver/receiver.err
+touch /home/don/node-garden-receiver/receiver.log
+chmod 666 /home/don/node-garden-receiver/receiver.err
+chmod 666 /home/don/node-garden-receiver/receiver.log
+ls -lap /home/don/node-garden-receiver/receiver.*
+echo "Done."
