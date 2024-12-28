@@ -28,19 +28,23 @@ function getConnection(): Promise<any> {
 export async function connect(): Promise<any> {
   const methodName: string = 'connect';
   log.debug({ moduleName, methodName }, 'starting...');
-  if (!pool) {
-    initializePool();
-  }
-  let connection: any;
-  if (pool) {
-    connection = await getConnection();
-  } else {
-    throw new Error('no connection pool');
-  }
-  return connection;
+  return new Promise((resolve, reject) => {
+    if (!pool) {
+      initializePool();
+    }
+    async () => {
+      let connection: any;
+      if (pool) {
+        connection = await getConnection();
+      } else {
+        return reject(new Error('no connection pool'));
+      }
+      return resolve(connection);
+    }
+  });
 }
 
-export function query(conn: any, sql: string, params: any[] = []): Promise<any> {
+export async function query(conn: any, sql: string, params: any[] = []): Promise<any> {
   const methodName: string = 'query';
   log.debug({ moduleName, methodName }, 'starting...');
   return new Promise((resolve, reject) => {

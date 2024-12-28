@@ -24,45 +24,50 @@ export async function insertOne(document: any): Promise<any> {
 
   const startDuration: number = Date.now();  
   log.debug({ moduleName, methodName, document });
+
+  return new Promise((resolve, reject) => {
     
-  let sqlColumnList: string = '';
-  let sqlParamsList: string = '';
-  const params: any[] = [];
-  for (const property in document) {
-    if ((property !== 'id') &&
-        (property !== 'rev') &&
-       !(document[property] instanceof Array)) {
-      sqlColumnList += `${changeCase.snakeCase(property)}, \n`;
-      sqlParamsList += `?, \n`;
-      params.push(document[property]);
+    let sqlColumnList: string = '';
+    let sqlParamsList: string = '';
+    const params: any[] = [];
+    for (const property in document) {
+      if ((property !== 'id') &&
+          (property !== 'rev') &&
+         !(document[property] instanceof Array)) {
+        sqlColumnList += `${changeCase.snakeCase(property)}, \n`;
+        sqlParamsList += `?, \n`;
+        params.push(document[property]);
+      }
     }
-  }
-  const sql: string = `
-    insert into ${tableName} (
-           ${sqlColumnList.substring(0, sqlColumnList.length - 3)} )
-    values (
-           ${sqlParamsList.substring(0, sqlParamsList.length - 3)} )
-    `;
-  log.debug({ moduleName, methodName, sql });
+    const sql: string = `
+      insert into ${tableName} (
+             ${sqlColumnList.substring(0, sqlColumnList.length - 3)} )
+      values (
+             ${sqlParamsList.substring(0, sqlParamsList.length - 3)} )
+      `;
+    log.debug({ moduleName, methodName, sql });
 
-  let conn: any;
-  try {
-    conn = await db.connect();
-    const result: any = await db.query(conn, sql, params);
-    conn.release();
+    async () => {
+      let conn: any;
+      try {
+        conn = await db.connect();
+        const result: any = await db.query(conn, sql, params);
+        conn.release();
 
-    let results: any = document;
-    results.id  = result.results.insertId;
-    results.rev = 0;
+        let results: any = document;
+        results.id  = result.results.insertId;
+        results.rev = 0;
 
-    log.info({ moduleName, methodName, duration: `${(Date.now() - startDuration) / 1000}` });
+        log.info({ moduleName, methodName, duration: `${(Date.now() - startDuration) / 1000}` });
 
-    return results;
-  } catch (error) {
-    log.error({ moduleName, methodName, error }); 
-    if (conn && conn.release) {
-      conn.release();
+        resolve(results);
+      } catch (error) {
+        log.error({ moduleName, methodName, error }); 
+        if (conn && conn.release) {
+          conn.release();
+        }
+        reject(error);
+      }
     }
-    return error;
-  }
+  });
 }
