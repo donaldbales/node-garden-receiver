@@ -12,10 +12,12 @@ router.post('/garden_data', async function(req, res, next) {
     const contentType = req.get('Content-Type') || 'application/x-www-form-urlencoded';
     if (contentType === 'application/json') {
         const document = req.body;
-        await db.insertOne(document).then((results) => {
+        try {
+            results = await db.insertOne(document);
             log.info({ module: __filename, method: 'router.post',
                 sent: 'POST /garden_data', results, 
                 duration: `${(Date.now() - startDuration) / 1000}` });
+            
             if (!results.error) {
                 log.info({ module: __filename, method: 'router.post',
                     sent: 'POST /garden_data', results, 
@@ -31,7 +33,8 @@ router.post('/garden_data', async function(req, res, next) {
                 res.status(500).json(results);
             }
             return next();
-        }).catch((error) => {
+        }
+        catch((error) {
             log.error({ module: __filename, method: 'router.post',
                 sent: 'POST /garden_data', error,
                 duration: `${(Date.now() - startDuration) / 1000}` });
@@ -44,7 +47,7 @@ router.post('/garden_data', async function(req, res, next) {
                 res.status(500).json(error);
             }
             return next();
-        });
+        }
     }
     else {
         res.status(404).send(' ');
