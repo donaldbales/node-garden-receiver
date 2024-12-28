@@ -34,7 +34,7 @@ router.post('/garden_data', async function(req, res, next) {
             }
             return next();
         }
-        catch((error) {
+        catch (error) {
             log.error({ module: __filename, method: 'router.post',
                 sent: 'POST /garden_data', error,
                 duration: `${(Date.now() - startDuration) / 1000}` });
