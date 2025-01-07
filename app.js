@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var cdataRouter = require('./routes/compost_data');
 var gdataRouter = require('./routes/garden_data');
+
+console.log('Starting Up.');
 
 var app = express();
 
@@ -22,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', cdataRouter);
 app.use('/', gdataRouter);
 
 // catch 404 and forward to error handler
@@ -40,7 +44,7 @@ app.use(function(err, req, res, next) {
 });
 
 function shut_down() {
-  console.log('Shutting down.');
+  console.log('\nShutting down.');
   process.exit(0);
 }
 

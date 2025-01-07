@@ -1,0 +1,15 @@
+drop   table compost_data;
+create table compost_data (
+id              bigint         auto_increment primary key,
+moisture        int,
+sample_date     datetime,
+temp_east       decimal,
+temp_west       decimal,
+temp_moisture   decimal,
+temp_rpi        decimal,
+insert_date     datetime       default current_timestamp,
+update_date     datetime       default current_timestamp on update current_timestamp );
+
+create unique index compost_data_uk
+on                  compost_data (
+sample_date );

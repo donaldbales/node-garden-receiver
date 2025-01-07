@@ -1,11 +1,16 @@
-var express = require('express');
-var router = express.Router();
-const db = require("../models/garden_data");
-const logger = require("../lib/logger");
-const log = logger.instance;
-const moduleName = 'routes/garden_data';
+import * as Logger from 'bunyan';
+import { Application, NextFunction, Request, Response, Router } from 'express';
+import * as db from '../models/compost_data';
+import * as logger from '../lib/logger';
+import * as express from 'express';
 
-router.post('/garden_data', async function(req, res, next) {
+const log: any = logger.instance;
+
+const moduleName: string = 'routes/compost_data';
+
+const router: Router = express.Router();
+
+router.post('/garden_data', async function(req: Request, res: Response, next: NextFunction) {
     const methodName = 'router.post';
     log.debug({ moduleName, methodName }, `starting...`);
     const startDuration = Date.now();
@@ -13,9 +18,9 @@ router.post('/garden_data', async function(req, res, next) {
     if (contentType === 'application/json') {
         const document = req.body;
         try {
-            results = await db.insertOne(document);
+            const results: any = await db.insertOne(document);
             log.info({ module: __filename, method: 'router.post',
-                sent: 'POST /garden_data', results, 
+                sent: 'POST /compost_data', results, 
                 duration: `${(Date.now() - startDuration) / 1000}` });
             res.status(201).json(results);
             return;
@@ -26,13 +31,13 @@ router.post('/garden_data', async function(req, res, next) {
                 error.error.code &&
                 error.error.code === 'ER_DUP_ENTRY') {
                 log.info({ module: __filename, method: 'router.post',
-                    sent: 'POST /garden_data', results: '', 
+                    sent: 'POST /compost_data', results: '', 
                     duration: `${(Date.now() - startDuration) / 1000}` });
                 res.status(422).json(error);
             }
             else {
                 log.error({ module: __filename, method: 'router.post',
-                    sent: 'POST /garden_data', error,
+                    sent: 'POST /compost_data', error,
                     duration: `${(Date.now() - startDuration) / 1000}` });
                 res.status(500).json(error);
             }
