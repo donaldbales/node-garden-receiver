@@ -10,7 +10,7 @@ const moduleName: string = 'routes/compost_data';
 
 const router: Router = express.Router();
 
-router.post('/garden_data', async function(req: Request, res: Response, next: NextFunction) {
+router.post('/compost_data', async function(req: Request, res: Response, next: NextFunction) {
     const methodName = 'router.post';
     log.debug({ moduleName, methodName }, `starting...`);
     const startDuration = Date.now();
