@@ -1,0 +1,13 @@
+drop   table garage_data;
+create table garage_data (
+id              bigint         auto_increment primary key,
+moisture        int,
+sample_date     datetime,
+temp_garage     decimal,
+temp_rpi        decimal,
+insert_date     datetime       default current_timestamp,
+update_date     datetime       default current_timestamp on update current_timestamp );
+
+create unique index garage_data_uk
+on                  garage_data (
+sample_date );

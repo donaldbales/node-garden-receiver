@@ -11,7 +11,7 @@ import * as logger from '../lib/logger';
 
 const log: any = logger.instance;
 
-const moduleName: string = 'lib/compost_data';
+const moduleName: string = 'models/compost_data';
 
 const tableName: string = 'compost_data';
 

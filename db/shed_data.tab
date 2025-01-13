@@ -1,0 +1,13 @@
+drop   table shed_data;
+create table shed_data (
+id              bigint         auto_increment primary key,
+moisture        int,
+sample_date     datetime,
+temp_shed       decimal,
+temp_rpi        decimal,
+insert_date     datetime       default current_timestamp,
+update_date     datetime       default current_timestamp on update current_timestamp );
+
+create unique index shed_data_uk
+on                  shed_data (
+sample_date );

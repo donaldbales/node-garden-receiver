@@ -1,4 +1,4 @@
-// compost_data.ts
+// shed_data.ts
 
 /* tslint:disable:no-console */
 
@@ -11,9 +11,9 @@ import * as logger from '../lib/logger';
 
 const log: any = logger.instance;
 
-const moduleName: string = 'models/garden_data';
+const moduleName: string = 'models/shed_data';
 
-const tableName: string = 'garden_data';
+const tableName: string = 'shed_data';
 
 /*
  * SQL INSERT

@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var cdataRouter = require('./routes/compost_data');
-var gdataRouter = require('./routes/garden_data');
+var compostDataRouter = require('./routes/compost_data');
+var gardenDataRouter = require('./routes/garden_data');
+var garageDataRouter = require('./routes/garage_data');
+var shedDataRouter = require('./routes/shed_data');
 
 console.log('Starting Up.');
 
@@ -25,8 +27,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/', cdataRouter);
-app.use('/', gdataRouter);
+app.use('/', compostDataRouter);
+app.use('/', gardenDataRouter);
+app.use('/', garageDataRouter);
+app.use('/', shedDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
